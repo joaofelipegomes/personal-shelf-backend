@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const publicController_1 = require("../controllers/publicController");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const router = (0, express_1.Router)();
+router.get('/profile/:username', publicController_1.getPublicProfile);
+router.get('/shelf/:username', publicController_1.getShelfData);
+router.post('/like', authMiddleware_1.authenticateToken, publicController_1.toggleLike);
+router.post('/favorite', authMiddleware_1.authenticateToken, publicController_1.toggleFavorite);
+router.get('/search', publicController_1.searchProfiles);
+router.get('/favorites', authMiddleware_1.authenticateToken, publicController_1.getFavorites);
+exports.default = router;

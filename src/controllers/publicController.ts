@@ -3,7 +3,7 @@ import { getAdminClient, getAuthClient } from '../config/supabase';
 
 // Obter perfil público pelo username
 export const getPublicProfile = async (req: Request, res: Response) => {
-  const { username } = req.params;
+  const username = req.params.username as string;
   const adminClient = getAdminClient();
   
   const { data: profile, error: profileError } = await adminClient
@@ -19,7 +19,7 @@ export const getPublicProfile = async (req: Request, res: Response) => {
 
 // Obter os itens da prateleira de um perfil público e likes e favoritos
 export const getShelfData = async (req: Request, res: Response) => {
-  const { username } = req.params;
+  const username = req.params.username as string;
   const adminClient = getAdminClient();
   
   // 1. Pegar o profile

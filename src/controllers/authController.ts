@@ -54,7 +54,7 @@ export const getSession = async (req: Request, res: Response) => {
 };
 
 export const checkUsername = async (req: Request, res: Response) => {
-  const { username } = req.params;
+  const username = req.params.username as string;
   const { data, error } = await supabase
     .from('profiles')
     .select('username')
