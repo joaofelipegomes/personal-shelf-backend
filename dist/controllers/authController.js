@@ -40,7 +40,7 @@ exports.signOut = signOut;
 const resetPassword = async (req, res) => {
     const { email } = req.body;
     const { error } = await supabase_1.supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'http://localhost:5173/', // URL do Frontend
+        redirectTo: 'https://colagem.app/', // URL do Frontend
     });
     if (error)
         return res.status(400).json({ error: error.message });

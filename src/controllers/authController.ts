@@ -5,14 +5,14 @@ export const signUp = async (req: Request, res: Response) => {
   const { email, password, username } = req.body;
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) return res.status(400).json({ error: error.message });
-  
+
   if (data.user) {
     const { error: profileError } = await supabase.from('profiles').insert([
       { id: data.user.id, username: username.toLowerCase() }
     ]);
     if (profileError) return res.status(400).json({ error: profileError.message });
   }
-  
+
   res.status(200).json(data);
 };
 
@@ -27,7 +27,7 @@ export const signOut = async (req: Request, res: Response) => {
   // O token vem no Header. Precisamos do client autenticado.
   const token = req.token;
   if (!token) return res.status(401).json({ error: 'Token missing' });
-  
+
   const authClient = getAuthClient(token);
   const { error } = await authClient.auth.signOut();
   if (error) return res.status(400).json({ error: error.message });
@@ -37,7 +37,7 @@ export const signOut = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'http://localhost:5173/', // URL do Frontend
+    redirectTo: 'https://colagem.app/', // URL do Frontend
   });
   if (error) return res.status(400).json({ error: error.message });
   res.status(200).json({ message: 'Password reset email sent' });
@@ -46,7 +46,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 export const getSession = async (req: Request, res: Response) => {
   const token = req.token;
   if (!token) return res.status(401).json({ error: 'Token missing' });
-  
+
   const authClient = getAuthClient(token);
   const { data, error } = await authClient.auth.getUser();
   if (error) return res.status(400).json({ error: error.message });
@@ -60,7 +60,7 @@ export const checkUsername = async (req: Request, res: Response) => {
     .select('username')
     .eq('username', username.toLowerCase())
     .maybeSingle();
-    
+
   if (error) return res.status(400).json({ error: error.message });
   res.status(200).json({ available: !data });
 };
