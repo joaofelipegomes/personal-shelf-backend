@@ -23,6 +23,15 @@ export const signIn = async (req: Request, res: Response) => {
   res.status(200).json(data);
 };
 
+export const refreshToken = async (req: Request, res: Response) => {
+  const { refresh_token } = req.body;
+  if (!refresh_token) return res.status(400).json({ error: 'Refresh token is required' });
+
+  const { data, error } = await supabase.auth.refreshSession({ refresh_token });
+  if (error) return res.status(401).json({ error: error.message });
+  res.status(200).json(data);
+};
+
 export const signOut = async (req: Request, res: Response) => {
   // O token vem no Header. Precisamos do client autenticado.
   const token = req.token;

@@ -8,6 +8,7 @@ router.post('/signup', authController_1.signUp);
 router.post('/login', authController_1.signIn);
 router.post('/logout', authMiddleware_1.authenticateToken, authController_1.signOut);
 router.post('/reset-password', authController_1.resetPassword);
+router.post('/refresh', authController_1.refreshToken);
 router.get('/session', authMiddleware_1.authenticateToken, authController_1.getSession);
 router.get('/check-username/:username', authController_1.checkUsername);
 router.post('/update-password', authMiddleware_1.authenticateToken, authController_1.updatePassword);

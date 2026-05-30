@@ -16,7 +16,7 @@ app.use((0, cors_1.default)({
 app.use(express_1.default.json({ limit: '50mb' }));
 app.use(express_1.default.urlencoded({ limit: '50mb', extended: true }));
 // API Routes
-app.use('/api', routes_1.default);
+app.use('/', routes_1.default);
 app.get('/', (req, res) => {
     res.send('Personal Shelf Backend API is running!');
 });

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePassword = exports.checkUsername = exports.getSession = exports.resetPassword = exports.signOut = exports.signIn = exports.signUp = void 0;
+exports.updatePassword = exports.checkUsername = exports.getSession = exports.resetPassword = exports.signOut = exports.refreshToken = exports.signIn = exports.signUp = void 0;
 const supabase_1 = require("../config/supabase");
 const signUp = async (req, res) => {
     const { email, password, username } = req.body;
@@ -25,6 +25,16 @@ const signIn = async (req, res) => {
     res.status(200).json(data);
 };
 exports.signIn = signIn;
+const refreshToken = async (req, res) => {
+    const { refresh_token } = req.body;
+    if (!refresh_token)
+        return res.status(400).json({ error: 'Refresh token is required' });
+    const { data, error } = await supabase_1.supabase.auth.refreshSession({ refresh_token });
+    if (error)
+        return res.status(401).json({ error: error.message });
+    res.status(200).json(data);
+};
+exports.refreshToken = refreshToken;
 const signOut = async (req, res) => {
     // O token vem no Header. Precisamos do client autenticado.
     const token = req.token;
