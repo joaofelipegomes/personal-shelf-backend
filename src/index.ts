@@ -7,8 +7,11 @@ dotenv.config();
 
 const app = express();
 
+const isDev = process.env.NODE_ENV === 'development';
+const allowedOrigin = isDev ? 'http://localhost:5173' : 'https://colagem.app';
+
 app.use(cors({
-  origin: 'https://colagem.app', // Permitir apenas o frontend local
+  origin: allowedOrigin,
   credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
