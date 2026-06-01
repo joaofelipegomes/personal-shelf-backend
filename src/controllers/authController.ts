@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { supabase, getAuthClient } from '../config/supabase';
+import { supabase, getAuthClient, getAdminClient } from '../config/supabase';
 
 export const signUp = async (req: Request, res: Response) => {
   const { email, password, username } = req.body;
@@ -17,7 +17,30 @@ export const signUp = async (req: Request, res: Response) => {
 };
 
 export const signIn = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email: emailOrUsername, password } = req.body;
+  
+  let email = emailOrUsername;
+
+  if (emailOrUsername && !emailOrUsername.includes('@')) {
+    const adminClient = getAdminClient();
+    const { data: profile, error: profileError } = await adminClient
+      .from('profiles')
+      .select('id')
+      .eq('username', emailOrUsername.toLowerCase())
+      .maybeSingle();
+
+    if (profileError || !profile) {
+      return res.status(400).json({ error: 'Invalid login credentials' });
+    }
+
+    const { data: userData, error: userError } = await adminClient.auth.admin.getUserById(profile.id);
+    if (userError || !userData || !userData.user || !userData.user.email) {
+      return res.status(400).json({ error: 'Invalid login credentials' });
+    }
+
+    email = userData.user.email;
+  }
+
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return res.status(400).json({ error: error.message });
   res.status(200).json(data);

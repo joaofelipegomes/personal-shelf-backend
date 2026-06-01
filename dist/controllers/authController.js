@@ -18,7 +18,24 @@ const signUp = async (req, res) => {
 };
 exports.signUp = signUp;
 const signIn = async (req, res) => {
-    const { email, password } = req.body;
+    const { email: emailOrUsername, password } = req.body;
+    let email = emailOrUsername;
+    if (emailOrUsername && !emailOrUsername.includes('@')) {
+        const adminClient = (0, supabase_1.getAdminClient)();
+        const { data: profile, error: profileError } = await adminClient
+            .from('profiles')
+            .select('id')
+            .eq('username', emailOrUsername.toLowerCase())
+            .maybeSingle();
+        if (profileError || !profile) {
+            return res.status(400).json({ error: 'Invalid login credentials' });
+        }
+        const { data: userData, error: userError } = await adminClient.auth.admin.getUserById(profile.id);
+        if (userError || !userData || !userData.user || !userData.user.email) {
+            return res.status(400).json({ error: 'Invalid login credentials' });
+        }
+        email = userData.user.email;
+    }
     const { data, error } = await supabase_1.supabase.auth.signInWithPassword({ email, password });
     if (error)
         return res.status(400).json({ error: error.message });
