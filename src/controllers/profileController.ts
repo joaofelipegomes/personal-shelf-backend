@@ -3,8 +3,7 @@ import { getAuthClient } from '../config/supabase';
 
 export const getProfile = async (req: Request, res: Response) => {
   const authClient = getAuthClient(req.token!);
-  const { data: { user }, error: authError } = await authClient.auth.getUser();
-  if (authError || !user) return res.status(401).json({ error: 'User not found' });
+  const user = req.user;
 
   const { data, error } = await authClient.from('profiles').select('*').eq('id', user.id).single();
   if (error) return res.status(400).json({ error: error.message });
@@ -13,8 +12,7 @@ export const getProfile = async (req: Request, res: Response) => {
 
 export const updateProfile = async (req: Request, res: Response) => {
   const authClient = getAuthClient(req.token!);
-  const { data: { user }, error: authError } = await authClient.auth.getUser();
-  if (authError || !user) return res.status(401).json({ error: 'User not found' });
+  const user = req.user;
 
   const { data, error } = await authClient.from('profiles').update(req.body).eq('id', user.id).select();
   if (error) return res.status(400).json({ error: error.message });

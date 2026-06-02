@@ -8,7 +8,7 @@ const getPublicProfile = async (req, res) => {
     const adminClient = (0, supabase_1.getAdminClient)();
     const { data: profile, error: profileError } = await adminClient
         .from('profiles')
-        .select('id, username, full_name, bg_color, avatar_url')
+        .select('id, username, full_name, bg_color, avatar_url, grid_style')
         .eq('username', username.toLowerCase())
         .single();
     if (profileError)
@@ -23,7 +23,7 @@ const getShelfData = async (req, res) => {
     // 1. Pegar o profile
     const { data: profile, error: profileError } = await adminClient
         .from('profiles')
-        .select('id, username, full_name, bg_color, avatar_url')
+        .select('id, username, full_name, bg_color, avatar_url, grid_style')
         .eq('username', username.toLowerCase())
         .single();
     if (profileError || !profile)

@@ -79,13 +79,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 export const getSession = async (req: Request, res: Response) => {
-  const token = req.token;
-  if (!token) return res.status(401).json({ error: 'Token missing' });
-
-  const authClient = getAuthClient(token);
-  const { data, error } = await authClient.auth.getUser();
-  if (error) return res.status(400).json({ error: error.message });
-  res.status(200).json({ user: data.user });
+  res.status(200).json({ user: req.user });
 };
 
 export const checkUsername = async (req: Request, res: Response) => {

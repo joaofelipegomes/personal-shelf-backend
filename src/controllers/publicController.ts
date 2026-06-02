@@ -8,7 +8,7 @@ export const getPublicProfile = async (req: Request, res: Response) => {
   
   const { data: profile, error: profileError } = await adminClient
     .from('profiles')
-    .select('id, username, full_name, bg_color, avatar_url')
+    .select('id, username, full_name, bg_color, avatar_url, grid_style')
     .eq('username', username.toLowerCase())
     .single();
 
@@ -25,7 +25,7 @@ export const getShelfData = async (req: Request, res: Response) => {
   // 1. Pegar o profile
   const { data: profile, error: profileError } = await adminClient
     .from('profiles')
-    .select('id, username, full_name, bg_color, avatar_url')
+    .select('id, username, full_name, bg_color, avatar_url, grid_style')
     .eq('username', username.toLowerCase())
     .single();
 

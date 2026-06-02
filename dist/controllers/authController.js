@@ -77,14 +77,7 @@ const resetPassword = async (req, res) => {
 };
 exports.resetPassword = resetPassword;
 const getSession = async (req, res) => {
-    const token = req.token;
-    if (!token)
-        return res.status(401).json({ error: 'Token missing' });
-    const authClient = (0, supabase_1.getAuthClient)(token);
-    const { data, error } = await authClient.auth.getUser();
-    if (error)
-        return res.status(400).json({ error: error.message });
-    res.status(200).json({ user: data.user });
+    res.status(200).json({ user: req.user });
 };
 exports.getSession = getSession;
 const checkUsername = async (req, res) => {
