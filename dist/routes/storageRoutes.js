@@ -9,6 +9,7 @@ const storageController_1 = require("../controllers/storageController");
 const authMiddleware_1 = require("../middlewares/authMiddleware");
 const router = (0, express_1.Router)();
 const upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() });
+router.get('/image/*path', storageController_1.getImage);
 router.use(authMiddleware_1.authenticateToken);
 router.post('/upload', upload.single('file'), storageController_1.uploadImage);
 router.delete('/remove', storageController_1.deleteImage);

@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { uploadImage, deleteImage } from '../controllers/storageController';
+import { uploadImage, deleteImage, getImage } from '../controllers/storageController';
 import { authenticateToken } from '../middlewares/authMiddleware';
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
+router.get('/image/*path', getImage);
+
 router.use(authenticateToken);
+
 
 router.post('/upload', upload.single('file'), uploadImage);
 router.delete('/remove', deleteImage);
